@@ -1,3 +1,188 @@
+# JavaScript API REST Dogs
+
+<a name="top"></a>
+
+## [English](#item1)
+## [Spanish](#item2)
+
+ 
+<a name="item1"></a>
+
+### English
+ 
+#### Used technology: JAVASCRIPT, HTML, CSS
+
+##### Abstract
+
+In this repository, I use a REST API to get images of dogs. You can save the image that you like the most, creating a collection. If you don't want to keep the image in favorites, you can delete it. You can also upload an image of your choice. Anytime you want, you can call the API to get new images.
+
+# API REST with JavaScript
+
+Interface: It is an abstraction layer, created for two systems to communicate. For example a keyboard that allows us to interact humans with the computer.
+
+API (Application Programming Interface): is an abstraction layer created for two robots to communicate.
+
+REST (representational state transfer): is the means to communicate robots through HTTP, that is, the Internet. The format in which they communicate is JSON, in this way the data is received.
+
+Users must consult the web pages and receive the information they are looking for. But they don't do it directly with the backend. Rather, the frontend receives user interaction, and we translate that into backend queries. Then the backend that does contain the information sends it to the frontend, so that it can be displayed to the users.
+
+## IMPLEMENTATION
+
+If we enter the search "github public apis" in google we can go to github and see a repository where the APIs are classified in an index.We see that there are 3 columns, to start we should choose an API with CORS that is NO, later we will understand what it means. AUTH is the authentication method, to start we should have an API without a method or one that tells us apiKey. In this case we choose "https://thedogapi.com/".
+
+We enter in the documentation and we have the url that we must use "https://api.thedogapi.com/v1/images/search".
+
+We create the file index.html and main.js. In the html file we create an img tag that will be where we will see the images of the dogs in this case. But we remove the src attribute, which is where the url should be.
+
+With fetch we make a call to the url, and then we can pass the response as the value of the image src.
+
+I then made another way to fetch the API call with async await. Also add the function to run when we load the page by placing an addEventListener to the DOM. Finally, place that when the button is clicked, the function is also executed to change the images.
+
+### Endpoints y Query parameters
+
+They are another way in which we can modify the result that our Rest API will give us. An API can have different routes and that is what **endpoints** are. That is why the APIs segment your information so that we do not have to make a request to the entire database in each request, but to the part that we want to obtain. For this, seeing the documentation of the API that we are consuming is important to see the different routes that we can use.
+
+There are also the **query parameters** that are extra information to the enpoints, to limit or specify much better what is the content that we want to request from our API, that is, from our backend. For example, in the endpoint we could ask to fetch the categories but with the query parameter we could add that fetch only the categories that begin with a certain letter, or a limited number of categories, etc.
+
+We are going to modify the main.js file so that we can implement the endpoints and query parameters in our getDog() function. In order to add the query parameter we use the question mark ? and in this case the documentation tells us that we can use *limit* to set the number of images we want to return. We must modify the function to get each of the urls in the json and pass them to the html.
+
+One change we make is that we had used querySelector to select the img tag in the html, but now we will use getElementById since we are going to have multiple img tags, with different ids. Therefore, in the html we must also create the number of image tags that we are going to request.
+
+### Status Code
+
+It's how HTTP tells us what happened with our request, with values ​​from 1xx to 5xx.
+
+### API Key
+
+It is one of the ways the backend can identify who is making each request. To better understand we must know what authentication and authorization is.
+**Authentication** is to identify who each person is, they do not know what someone can or cannot do, they are only dedicated to identifying someone.
+**Authorization** is what tells us what permissions each one has.
+These work together to allow or deny access to information. The API Key then are one of the ways to identify who each one is.
+
+In order to send an API Key in each request we make to the backend, we can use several ways:
+* query parameter
+* authorization header: a slightly more comfortable way to send our API Key
+
+API Keys are not the only way to identify, they also exist:
+* Authorization: Basic
+* Authorization: Bearer token
+* OAuth 2.0
+* Access KEY + Secret KEY
+
+Keep in mind that in this case we are using **Application-based authentication**, that is, we are authenticating our application, that is, we are authenticating the frontend so that it can make requests to the backend. But there are applications where we also need **User-based authentication**. This means that if we don't give the same information to all users in our frontend, we must somehow specify who receives what information. We will only see the first way to authenticate.
+
+In the documentation of the API that we are consulting, we see that it shows us how we can send the requests with API keys. To obtain the API Keys we must register on the home page.
+
+## Layout
+
+We are going to modify our HTML to be able to have a section in which to save our favorite photos and another in which to upload photos.
+
+## HTTP Methods
+
+It is the way in which the frontend tells the backend the type of request that we are going to make. The most common:
+* GET: It is the one we use until now, and being the most common, fetch does not ask us to place it.
+* POST
+* PUT
+* PATCH
+* DELETE
+
+In order to implement saving photos in a favorites section, we see that the documentation shows us how we can make requests to a particular endpoint. It also clarifies that we must have an APY Key, if we make the call without it and do a console.log we see that an error appears.
+
+We are going to build a **span** tag in the html, so that if there is an error we can see it there. Inside the getRandomDog function we place an if so that if there is an error (and we do this by consulting the status code of the response, which is different from 200) we send it as a span value. We place a url without the API Key to use it in the favorites function, so we can see how the error is displayed in the HTML.
+
+## POST
+
+We are going to use this method to call an API that saves a photo as a favorite.
+
+When we call **fetch** and we want to use a method other than GET, for example POST, we must pass it as the second argument to fetch (the first is the url).
+
+We must also send **headers and body**.
+
+The body carries the information requested by the API, in this case the id of the image. We cannot send this information as a JavaScript object, but we must do it as a string. This is because this information will be read by our backend, and if we are using another programming language we must send it in string format, so that it can be understood.
+
+We are obtaining the id of the image that we place in the body by making a console.log of the information that we receive when doing GET to the favorites URL.
+
+In the html we place the id to the buttons that will be the ones that execute the function of saving the image, and we also place it inside the html tag that in **onclick** executes the function.
+
+## DOM MANIPULATION
+
+In the if of the load favorites function (**getFavouritesDog()**), we print in the span tag if there is an error when calling the function. But we are not using any else, that the function enters it when the status code is 200.
+
+So when we load the function we receive an **array**, inside which are the urls, which we will use to be able to show the photos saved as favorites. Therefore we must loop through that array and retrieve the urls, using **forEach**. And then we will have to manipulate the **DOM** to create the labels that we need according to the number of urls that we have saved as favorites.
+
+For the src attribute inside the img tag, we get the url that comes from data, on each object that we call myDogs.
+
+We are going to modify the **saveFavoriteDog()** function so that it receives an **id** as an argument, which will be the value that comes with the image from the API, which we will use to save that photo as a favorite. We delete the call of this function that we did with onclick in each button tag, since we will do it with js. Therefore we must get each button in the **getRandomDog()** function.
+
+So now we can call the save function on each of the buttons, and just like we do with the images we get the value for each one, we're going to get the id we need for each of the function calls. We must use an arrow function so that it is not executed directly when reloading the page.
+
+## DELETE
+
+Let's create a function to **delete** photos from favorites. For this we need to use a different url as indicated by the API documentation, this endpoint needs the id of the photo. Therefore this endpoint is dynamic, it is modified by each one of the urls. So we're going to store an arrow function in a constant, which receives the id, and passes it to the URL.
+
+The method to use in the function is DELETE. It is not necessary to send header and body information, since we are sending the id in the URL.
+
+We have to add this function to the buttons we build in the forEach of the function that gets the favorite dogs. We give the buttons the onclick method, and wrap the function in an arrow function.
+
+We are going to place the call of the load favorites function, every time we save a favorite photo. The problem that arises is that it duplicates all the photos, since we are not cleaning the html section, so the new tags are created after the ones we already had. Therefore, in the function where we obtain the favorites, we must eliminate the content before doing the forEach.
+
+## HTTP Headers
+
+They help us to let the backend know how we are sending the information, in the body.
+
+There are many types:
+* content-type
+* authorization
+* cookies
+* location
+* etc, etc
+
+## Authorization header
+
+We are going to eliminate the api_key that we were sending inside the url as a query parameter, but only for the favorites url. Then in the function that we send this URL, we put that the method is GET, and inside the headers we must put **X-API-KEY**, as the documentation says, and there we put the value of the api_key. I also added this value in the saveFavoriteDog(id) function because we are using the same url.
+
+While this way of sending the API is a little more secure, it is not difficult to break the headers.
+
+## Content-type
+
+As we said, it is so that the frontend and the backend agree on the type of content that they are going to speak.
+
+We are using application/json but there are others:
+* applications/xml
+* application/zip
+* application/x-www-form-urlencoded
+We can also send files:
+* audio/mpeg
+* audio/x-ms-wma
+* audio/x-wav
+* image/gif
+* image/jpeg
+* application/msword
+* etc, etc
+
+## FormData
+
+Let's create an option to **upload photos**. For this we create a section in html with a form, where we can upload a photo through an input. The type of the input is **file**. We create a button that, when pressed, executes the function that we will call **uploadPhoto()**, and we create it in js.
+
+In our function we are going to use **FormData**, which is appropriate to be able to obtain the values ​​that come from the forms in HTML, as in this case. The name that we place on each of the inputs that we have in the form will be the key to be able to access the value from **FormData**.
+
+In order to upload the image, the API documentation tells us that we have an endpoint (/images/upload) in which we must use the POST method. It also tells us that a file must go in the body.
+
+When building the fetch we put the 'POST' method, but the most important thing is that it changes the content-type being in this case multipart/form-data. And then we can just in the body send the instance of our FormData. In this case, a 500 error arose when we put the content-type, and it worked when we didn't put it.
+
+[Go up](#top)
+
+<a name="item2"></a>
+
+### Spanish
+ 
+#### Tecnologías utilizadas: JAVASCRIPT, HTML, CSS
+
+##### Resumen
+
+En este repositorio, uso una API REST para obtener imágenes de perros. Puedes guardar la imagen que más te guste, creando una colección.
+Si no desea mantener la imagen en favoritos, puede eliminarla. También puede cargar una imagen de su elección. Cada vez que lo desee, puede llamar a la API para obtener nuevas imágenes.
+
 # API REST con JavaScript
 
 Interfaz: es una capa de abstracción, creada para que dos sistemas se comuniquen. Por ejemplo un teclado que nos permite interactuar a los humanos con la computadora. 
@@ -150,3 +335,4 @@ Para poder subir la imagen la documentación de la API, nos dice que tenemos un 
 
 Al construir el fetch colocamos el metodo 'POST', pero lo más importante es que cambia el content-type siendo en este caso multipart/form-data. Y luego podemos simplemente en el body enviar la instancia de nuestro FormData. En este caso surgia un error 500 cuando colocabamos el content-type, y si funcionaba cuando no lo poniamos. 
 
+[Subir](#top)
